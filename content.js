@@ -100,14 +100,14 @@ window.onload = () => {
       // add the normal due date
       iCalendar += singleEventHelper(
         { start: convertDateAndTime(value[0]) },
-        courseTitle + " " + key,
+        "[" + courseTitle + "] " + key,
         "Your assignment " + key + " in "+ courseTitle +" is due on this day."
         )
 
       if (value[1] != undefined ){
         iCalendar += singleEventHelper(
           { start: convertDateAndTime(value[1]) },
-          courseTitle + " " + key,
+          "[" + courseTitle + "] " + key,
           "Your assignment " + key + " in "+ courseTitle +" is late due on this day."
           )
       }
@@ -118,7 +118,7 @@ window.onload = () => {
     iCalendar += "END:VCALENDAR";
     addToCalendarAnchor.href = makeIcsFile();
     // download text as ics file
-    addToCalendarAnchor.download = "event.ics";
+    addToCalendarAnchor.download = courseTitle + " Calendar.ics";
   }
 
   // note: each event needs to have a unique uid, so we use description here as uid
