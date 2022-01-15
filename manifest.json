@@ -1,0 +1,27 @@
+{
+  "name": "Gradescope Assignment Reminder",
+  "version": "1.0.0",
+  "description": "Allow users to import assignment due dates to Google Calender",
+  "manifest_version": 2,
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "content_scripts": [
+    {
+      "js": ["content.js"],
+      "matches": ["https://*.gradescope.com/courses/*"],
+      "run_at": "document_end"
+    }
+  ],
+  "permissions": ["bookmarks"],
+  "icons": {
+    "16": "G_16.png",
+    "48": "G_48.png",
+    "128": "G_128.png"
+  },
+  "browser_action": {
+    "default_title": "Click here test",
+    "default_popup": "popup.html"
+  }
+}
