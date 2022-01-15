@@ -64,49 +64,51 @@ window.onload = () => {
   }
 
 
-  var icsFile = null;
+var icsFile = null;
+var iCalendar =  
+"BEGIN:VCALENDAR\n" +
+"CALSCALE:GREGORIAN\n" +
+"METHOD:PUBLISH\n" +
+"PRODID:-//Test Cal//EN\n" +
+"VERSION:2.0\n";
+
 function createFile() {
-  var eventDate = {
-      start: "20220114",
-      end: "20220114"
-    },
-    summary = "test summary"
-    description = "test description";
   
-  addToCalendarAnchor.href = makeIcsFile(eventDate, summary, description);
-  // addToCalendarAnchor.classList.remove("hide");
+  iCalendar += singleEventHelper({start: "20220114", end: "20220114"}, "test summary", "test desc");
+  iCalendar += singleEventHelper({start: "20220115", end: "20220115"}, "test summary2", "test desc2");
+  iCalendar += singleEventHelper({start: "20220116", end: "20220116"}, "test summary3", "test desc3");
+  iCalendar += singleEventHelper({start: "20220116", end: "20220116"}, "test summary4", "test desc4");
+
+  // add ending to iCalendar
+  iCalendar = iCalendar + "END:VCALENDAR";
+  addToCalendarAnchor.href = makeIcsFile();
   addToCalendarAnchor.download = "event.ics";
 }
 
-function makeIcsFile(date, summary, description) {
-  var test =
-    "BEGIN:VCALENDAR\n" +
-    "CALSCALE:GREGORIAN\n" +
-    "METHOD:PUBLISH\n" +
-    "PRODID:-//Test Cal//EN\n" +
-    "VERSION:2.0\n" +
-    "BEGIN:VEVENT\n" +
-    "UID:test-1\n" +
-    "DTSTAMP\n" +
-    date.start +
-    "DTSTART;VALUE=DATE:" +
-    date.start +
-    "\n" +
-    "DTEND;VALUE=DATE:" +
-    date.end +
-    "\n" +
-    "SUMMARY:" +
-    summary +
-    "\n" +
-    "DESCRIPTION:" +
-    description +
-    "\n" +
-    "END:VEVENT\n" +
-    "END:VCALENDAR";
+// note: each event needs to have a unique uid
+function singleEventHelper(date, summary, description){
+  var icsEvent = 
+  "BEGIN:VEVENT\n" +
+  "UID:" + summary + "\n" +
+  "DTSTART;VALUE=DATE:" +
+  date.start +
+  "\n" +
+  "DTEND;VALUE=DATE:" +
+  date.end +
+  "\n" +
+  "SUMMARY:" +
+  summary +
+  "\n" +
+  "DESCRIPTION:" +
+  description +
+  "\n" +
+  "END:VEVENT\n";
+  return icsEvent;
 
-  var blob = new File([test], { type: "text/plain" });
+}
 
-
+function makeIcsFile() {
+  var blob = new File([iCalendar], { type: "text/plain" });
   if (icsFile !== null) {
     window.URL.revokeObjectURL(icsFile);
   }
