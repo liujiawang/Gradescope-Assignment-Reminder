@@ -60,5 +60,57 @@ window.onload = () => {
       }
     }
     console.log(assignmentDueDateObject);
+    createFile();
   }
+
+
+  var icsFile = null;
+function createFile() {
+  var eventDate = {
+      start: "20220114",
+      end: "20220114"
+    },
+    summary = "test summary"
+    description = "test description";
+  
+  addToCalendarAnchor.href = makeIcsFile(eventDate, summary, description);
+  // addToCalendarAnchor.classList.remove("hide");
+  addToCalendarAnchor.download = "event.ics";
+}
+
+function makeIcsFile(date, summary, description) {
+  var test =
+    "BEGIN:VCALENDAR\n" +
+    "CALSCALE:GREGORIAN\n" +
+    "METHOD:PUBLISH\n" +
+    "PRODID:-//Test Cal//EN\n" +
+    "VERSION:2.0\n" +
+    "BEGIN:VEVENT\n" +
+    "UID:test-1\n" +
+    "DTSTAMP\n" +
+    date.start +
+    "DTSTART;VALUE=DATE:" +
+    date.start +
+    "\n" +
+    "DTEND;VALUE=DATE:" +
+    date.end +
+    "\n" +
+    "SUMMARY:" +
+    summary +
+    "\n" +
+    "DESCRIPTION:" +
+    description +
+    "\n" +
+    "END:VEVENT\n" +
+    "END:VCALENDAR";
+
+  var blob = new File([test], { type: "text/plain" });
+
+
+  if (icsFile !== null) {
+    window.URL.revokeObjectURL(icsFile);
+  }
+  icsFile = window.URL.createObjectURL(blob);
+  return icsFile;
+}
 };
