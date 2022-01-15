@@ -31,6 +31,9 @@ window.onload = () => {
 
   // declare an object to store the key, value pair: {assignment name: [on time due date, late due date]}
   var assignmentDueDateObject = {};
+  
+  var courseTitle;
+
   // TODO: need to work on this in the convertDateAndTime() function
   // declare a set for tracking if the assignment has time left
   // will be used to determine the year in the convertDateAndTime() function
@@ -69,16 +72,22 @@ window.onload = () => {
       if (assignmentName[0] != undefined && dueDate[0] != undefined) {
         assignmentDueDateObject[assignmentName] = dueDate;
       }
+
+      // add course title
+      courseTitle = document.querySelector(".courseHeader--title").innerText;
+
     }
     console.log(assignmentDueDateObject);
     console.log(timeRemainingSet);
+    console.log(courseTitle);
     createFile();
   }
 
   var icsFile = null;
-  var iCalendar = "";
+  var iCalendar = ""; // iCalendar in format of string
 
   function createFile() {
+    // add beginning to iCalendar
     iCalendar =
       "BEGIN:VCALENDAR\n" +
       "CALSCALE:GREGORIAN\n" +
@@ -86,44 +95,38 @@ window.onload = () => {
       "PRODID:-//Test Cal//EN\n" +
       "VERSION:2.0\n";
 
-    iCalendar += singleEventHelper(
-      { start: "20220114T100000" },
-      "test summary",
-      "test desc"
-    );
-    iCalendar += singleEventHelper(
-      { start: "20220115T130000" },
-      "test summary2",
-      "test desc2"
-    );
-    iCalendar += singleEventHelper(
-      { start: "20220116T081500" },
-      "test summary3",
-      "test desc3"
-    );
-    iCalendar += singleEventHelper(
-      { start: "20220116T233000" },
-      "test summary4",
-      "test desc4"
-    );
-    iCalendar += singleEventHelper(
-      { start: convertDateAndTime("APR 08 AT 3:00PM") },
-      "[CIT 591] TestBed",
-      "Your assignment TestBed in CIT 591 is due on this day."
-    );
+    // add each assignment to calendar
+    Object.entries(assignmentDueDateObject).forEach(([key, value]) => {
+      // add the normal due date
+      iCalendar += singleEventHelper(
+        { start: convertDateAndTime(value[0]) },
+        courseTitle + " " + key,
+        "Your assignment " + key + " in "+ courseTitle +" is due on this day."
+        )
 
+      if (value[1] != undefined ){
+        iCalendar += singleEventHelper(
+          { start: convertDateAndTime(value[1]) },
+          courseTitle + " " + key,
+          "Your assignment " + key + " in "+ courseTitle +" is late due on this day."
+          )
+      }
+
+    });
+    
     // add ending to iCalendar
     iCalendar += "END:VCALENDAR";
     addToCalendarAnchor.href = makeIcsFile();
+    // download text as ics file
     addToCalendarAnchor.download = "event.ics";
   }
 
-  // note: each event needs to have a unique uid
+  // note: each event needs to have a unique uid, so we use description here as uid
   function singleEventHelper(date, summary, description) {
     var icsEvent =
       "BEGIN:VEVENT\n" +
       "UID:" +
-      summary +
+      description +
       "\n" +
       "DTSTART;VALUE=DATE:" +
       date.start +
@@ -140,12 +143,13 @@ window.onload = () => {
     return icsEvent;
   }
 
+  // create a new ics file
   function makeIcsFile() {
     var blob = new File([iCalendar], { type: "text/plain" });
     if (icsFile !== null) {
       window.URL.revokeObjectURL(icsFile);
     }
-    icsFile = window.URL.createObjectURL(blob);
+    icsFile = window.URL.createObjectURL(blob); // create a new blob and attach to href in createFile
     return icsFile;
   }
 };
