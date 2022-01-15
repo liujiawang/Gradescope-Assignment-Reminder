@@ -47,7 +47,9 @@ window.onload = () => {
         ".submissionTimeChart--dueDate"
       );
       var dueDate = []; // [on time due date, late due date]
-      dueDate.push(submissionTime[0].innerText);
+      if (submissionTime[0] != undefined) {
+        dueDate.push(submissionTime[0].innerText);
+      }
       // The assignment has late due dates
       if (submissionTime.length > 1) {
         dueDate.push(submissionTime[1].innerText);
