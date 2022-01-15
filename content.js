@@ -65,14 +65,15 @@ window.onload = () => {
 
 
 var icsFile = null;
-var iCalendar =  
-"BEGIN:VCALENDAR\n" +
+var iCalendar =  "";
+
+function createFile() {
+  iCalendar = 
+  "BEGIN:VCALENDAR\n" +
 "CALSCALE:GREGORIAN\n" +
 "METHOD:PUBLISH\n" +
 "PRODID:-//Test Cal//EN\n" +
 "VERSION:2.0\n";
-
-function createFile() {
   
   iCalendar += singleEventHelper({start: "20220114", end: "20220114"}, "test summary", "test desc");
   iCalendar += singleEventHelper({start: "20220115", end: "20220115"}, "test summary2", "test desc2");
@@ -80,7 +81,7 @@ function createFile() {
   iCalendar += singleEventHelper({start: "20220116", end: "20220116"}, "test summary4", "test desc4");
 
   // add ending to iCalendar
-  iCalendar = iCalendar + "END:VCALENDAR";
+  iCalendar += "END:VCALENDAR";
   addToCalendarAnchor.href = makeIcsFile();
   addToCalendarAnchor.download = "event.ics";
 }
