@@ -14,7 +14,6 @@
       "run_at": "document_end"
     }
   ],
-  "permissions": ["bookmarks"],
   "icons": {
     "16": "G_16.png",
     "48": "G_48.png",
