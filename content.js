@@ -101,14 +101,14 @@ window.onload = () => {
       iCalendar += singleEventHelper(
         { start: convertDateAndTime(value[0]) },
         "[" + courseTitle + "] " + key,
-        "Your assignment " + key + " in "+ courseTitle +" is due on this day."
+        "Your assignment " + key + " in "+ courseTitle +" is due on this time."
         )
 
       if (value[1] != undefined ){
         iCalendar += singleEventHelper(
           { start: convertDateAndTime(value[1]) },
           "[" + courseTitle + "] " + key,
-          "Your assignment " + key + " in "+ courseTitle +" is late due on this day."
+          "Your assignment " + key + " in "+ courseTitle +" is late due on this time."
           )
       }
 
@@ -126,7 +126,7 @@ window.onload = () => {
     var icsEvent =
       "BEGIN:VEVENT\n" +
       "UID:" +
-      description +
+      date + description +
       "\n" +
       "DTSTART;VALUE=DATE:" +
       date.start +
