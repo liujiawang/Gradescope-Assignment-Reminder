@@ -115,31 +115,51 @@ window.onload = () => {
           todayMonth >= Number(convertDateAndTime(value[0])[1]) &&
           todayDay > Number(convertDateAndTime(value[0])[2])
         ) {
-          let newYear = convertDateAndTime(value[0])[0]++;
-        }
+          let dt = convertDateAndTime(value[0]);
+          let newyr = dt[0]++;
 
-        // add the normal due date
-        iCalendar += singleEventHelper(
-          { start: convertDateAndTime(value[0]) },
-          "[" + courseTitle + "] " + key,
-          "Your assignment " +
+          iCalendar += singleEventHelper(
+            { start: newyr + dt[1] + dt[2] + "T" + dt[3] + dt[4] },
+            "[" + courseTitle + "] " + key,
+            "Your assignment " +
             key +
             " in " +
             courseTitle +
             " is due on this time."
-        );
-      }
-      if (value[1] != undefined && isLaterThanToday(value[1])) {
-        iCalendar += singleEventHelper(
-          { start: convertDateAndTime(value[1]) },
-          "[" + courseTitle + "] " + key,
-          "Your assignment " +
+          );
+        } else {
+          iCalendar += singleEventHelper(
+            { start: formatDateFromList(convertDateAndTime(value[0])) },
+            "[" + courseTitle + "] " + key,
+            "Your assignment " +
             key +
             " in " +
             courseTitle +
-            " is late due on this time."
-        );
+            " is due on this time."
+          )
+        }
+
       }
+
+      // if (value[1] != undefined && isLaterThanToday(value[1])) {
+      //   if (
+      //     todayMonth >= Number(convertDateAndTime(value[1])[1]) &&
+      //     todayDay > Number(convertDateAndTime(value[1])[2])
+      //   ) {
+
+      //     iCalendar += singleEventHelper(
+      //       { start: formatDateFromList(convertDateAndTime(value[1])) },
+      //       "[" + courseTitle + "] " + key,
+      //       "Your assignment " +
+      //       key +
+      //       " in " +
+      //       courseTitle +
+      //       " is late due on this time."
+      //     );
+
+      //   }
+
+      // }
     });
 
     // add ending to iCalendar
@@ -233,26 +253,17 @@ function convertDateAndTime(date) {
   let today = new Date();
   let todayYear = today.getFullYear();
 
-  console.log("today month: ", todayMonth);
-  console.log("today day: ", todayDay);
-  console.log("assignment month; ", month);
-  console.log("assignment day; ", day);
-
   return [todayYear, month, day, hour, minute];
+}
+
+function formatDateFromList(dateList) {
+  return dateList[0] + dateList[1] + dateList[2] + "T" + dateList[3] + dateList[4];
 }
 
 function isLaterThanToday(date) {
   let today = new Date();
-  let assignmentDate = convertDateAndTime(date);
+  let assignmentDate = formatDateFromList(convertDateAndTime(date));
   console.log("converted assignment date: ", assignmentDate);
-  let assignmentDate =
-    assignmentDate[0] +
-    assignmentDate[1] +
-    assignmentDate[2] +
-    "T" +
-    assignmentDate[4] +
-    assignmentDate[5] +
-    "00";
   assignmentDate =
     assignmentDate.slice(0, 4) +
     "-" +
