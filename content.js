@@ -147,40 +147,40 @@ window.onload = () => {
               " is due on this time."
             );
           }
+        }
 
-          if (value[1] != undefined) {
-            console.log("late", timeRemainingMap[key].split(" "));
-            if (timeRemainingMap[key].split(" ")[0] == "Closes") {
-              if (!isLaterThanToday(value[0])) {
-                let dt = convertDateAndTime(value[1]);
-                let newyr = Number(dt[0]) + 1;
-                //console.log("dt,newyr", dt, newyr);
-                iCalendar += singleEventHelper(
-                  { start: newyr + dt[1] + dt[2] + "T" + dt[3] + dt[4] + "00" },
-                  "[" + courseTitle + "] " + key,
-                  "Your assignment " +
-                  key +
-                  " in " +
-                  courseTitle +
-                  " is late due on this time."
-                );
-              } else {
-                iCalendar += singleEventHelper(
-                  { start: formatDateFromList(convertDateAndTime(value[1])) },
-                  "[" + courseTitle + "] " + key,
-                  "Your assignment " +
-                  key +
-                  " in " +
-                  courseTitle +
-                  " is late due on this time."
-                );
-              }
-
-            } 
+        if (value[1] != undefined) {
+          console.log("late", timeRemainingMap[key].split(" "));
+          if (!isLaterThanToday(value[1])) {
+            let dt = convertDateAndTime(value[1]);
+            let newyr = Number(dt[0]) + 1;
+            //console.log("dt,newyr", dt, newyr);
+            iCalendar += singleEventHelper(
+              { start: newyr + dt[1] + dt[2] + "T" + dt[3] + dt[4] + "00" },
+              "[" + courseTitle + "] " + key,
+              "Your assignment " +
+              key +
+              " in " +
+              courseTitle +
+              " is late due on this time."
+            );
+          } else {
+            iCalendar += singleEventHelper(
+              { start: formatDateFromList(convertDateAndTime(value[1])) },
+              "[" + courseTitle + "] " + key,
+              "Your assignment " +
+              key +
+              " in " +
+              courseTitle +
+              " is late due on this time."
+            );
           }
 
+
         }
+
       }
+
 
 
     });
