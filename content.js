@@ -34,10 +34,6 @@ window.onload = () => {
 
   var courseTitle;
 
-  // TODO: need to work on this in the convertDateAndTime() function
-  // declare a set for tracking if the assignment has time left
-  // will be used to determine the year in the convertDateAndTime() function
-
   var timeRemainingMap = {}; // a map of assignments that have time remaining ie. not passed due
 
   function getStatus() {
@@ -51,7 +47,6 @@ window.onload = () => {
         textStatus[i] != undefined &&
         textStatus[i].innerText == searchValue
       ) {
-        // console.log(textStatus[i]);
         var currentRow = textStatus[i].parentNode.parentElement;
         // extract assignment name
         var assignmentName =
@@ -74,7 +69,6 @@ window.onload = () => {
         );
         if (timeRemaining.length != 0) {
           timeRemainingMap[assignmentName] = timeRemaining[0].innerText;
-          // console.log("time remaining tag: ", timeRemaining[0]);
         }
         // add assignments and due date to the object
         if (assignmentName[0] != undefined && dueDate[0] != undefined) {
@@ -85,11 +79,7 @@ window.onload = () => {
       // add course title
       courseTitle = document.querySelector(".courseHeader--title").innerText;
     }
-    // console.log(assignmentDueDateObject);
-    // console.log(timeRemainingMap);
-    // console.log(courseTitle);
     createFile();
-    // console.log(isLaterThanToday("JAN 15 AT 6:00PM"));
   }
 
   var icsFile = null;
@@ -116,73 +106,60 @@ window.onload = () => {
 
     // add each assignment to calendar
 
-
     Object.entries(assignmentDueDateObject).forEach(([key, value]) => {
-
-      //console.log("key, laterthan", "haskey", key, isLaterThanToday(value[0]), timeRemainingSet.has(key));
-      if ((key in timeRemainingMap)) {
-
+      if (key in timeRemainingMap) {
         if (timeRemainingMap[key].split(" ")[0] != "Closes") {
           if (!isLaterThanToday(value[0])) {
             let dt = convertDateAndTime(value[0]);
             let newyr = Number(dt[0]) + 1;
-            //console.log("dt,newyr", dt, newyr);
             iCalendar += singleEventHelper(
               { start: newyr + dt[1] + dt[2] + "T" + dt[3] + dt[4] + "00" },
               "[" + courseTitle + "] " + key,
               "Your assignment " +
-              key +
-              " in " +
-              courseTitle +
-              " is due on this time."
+                key +
+                " in " +
+                courseTitle +
+                " is due on this time."
             );
           } else {
             iCalendar += singleEventHelper(
               { start: formatDateFromList(convertDateAndTime(value[0])) },
               "[" + courseTitle + "] " + key,
               "Your assignment " +
-              key +
-              " in " +
-              courseTitle +
-              " is due on this time."
+                key +
+                " in " +
+                courseTitle +
+                " is due on this time."
             );
           }
         }
 
         if (value[1] != undefined) {
-          console.log("late", timeRemainingMap[key].split(" "));
           if (!isLaterThanToday(value[1])) {
             let dt = convertDateAndTime(value[1]);
             let newyr = Number(dt[0]) + 1;
-            //console.log("dt,newyr", dt, newyr);
             iCalendar += singleEventHelper(
               { start: newyr + dt[1] + dt[2] + "T" + dt[3] + dt[4] + "00" },
               "[" + courseTitle + "] " + key,
               "Your assignment " +
-              key +
-              " in " +
-              courseTitle +
-              " is late due on this time."
+                key +
+                " in " +
+                courseTitle +
+                " is late due on this time."
             );
           } else {
             iCalendar += singleEventHelper(
               { start: formatDateFromList(convertDateAndTime(value[1])) },
               "[" + courseTitle + "] " + key,
               "Your assignment " +
-              key +
-              " in " +
-              courseTitle +
-              " is late due on this time."
+                key +
+                " in " +
+                courseTitle +
+                " is late due on this time."
             );
           }
-
-
         }
-
       }
-
-
-
     });
 
     // add ending to iCalendar
@@ -224,7 +201,6 @@ window.onload = () => {
     icsFile = window.URL.createObjectURL(blob); // create a new blob and attach to href in createFile
     return icsFile;
   }
-
 
   // map month abbreviation to numerical month
   var monthMap = {
@@ -271,7 +247,6 @@ window.onload = () => {
       }
     }
 
-    // TODO: need to reconsider which year to use
     // get today's year
     let today = new Date();
     let todayYear = today.getFullYear();
@@ -280,13 +255,20 @@ window.onload = () => {
   }
 
   function formatDateFromList(dateList) {
-    return dateList[0] + dateList[1] + dateList[2] + "T" + dateList[3] + dateList[4] + "00";
+    return (
+      dateList[0] +
+      dateList[1] +
+      dateList[2] +
+      "T" +
+      dateList[3] +
+      dateList[4] +
+      "00"
+    );
   }
 
   function isLaterThanToday(date) {
     let today = new Date();
     let assignmentDate = formatDateFromList(convertDateAndTime(date));
-    console.log("converted assignment date: ", assignmentDate);
     assignmentDate =
       assignmentDate.slice(0, 4) +
       "-" +
@@ -298,8 +280,6 @@ window.onload = () => {
       ":" +
       assignmentDate.slice(13, 15);
     assignmentDate = new Date(assignmentDate);
-    // console.log("today's date", today);
-    // console.log("assignment date", assignmentDate);
     return assignmentDate > today;
   }
-}
+};

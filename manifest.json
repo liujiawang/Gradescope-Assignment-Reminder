@@ -1,7 +1,7 @@
 {
   "name": "Gradescope Assignment Reminder",
   "version": "1.0.0",
-  "description": "Allow users to import assignment due dates to Google Calender",
+  "description": "Allow users to import assignment due dates to calendars.",
   "manifest_version": 2,
   "background": {
     "scripts": ["background.js"],
@@ -20,7 +20,7 @@
     "128": "G_128.png"
   },
   "browser_action": {
-    "default_title": "Click here test",
+    "default_title": "Import assignment due dates to calendars",
     "default_popup": "popup.html"
   }
 }
