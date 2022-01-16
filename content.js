@@ -37,7 +37,7 @@ window.onload = () => {
   // TODO: need to work on this in the convertDateAndTime() function
   // declare a set for tracking if the assignment has time left
   // will be used to determine the year in the convertDateAndTime() function
-  var timeRemainingSet = new Set();
+  // var timeRemainingMap = {};
 
   function getStatus() {
     // only "no submission" assignments have "submissionStatus--text" class
@@ -68,12 +68,13 @@ window.onload = () => {
           dueDate.push(submissionTime[1].innerText);
         }
         // if the assignment has time remaining, add to the set
-        var timeRemaining = currentRow.querySelectorAll(
-          ".submissionTimeChart--timeRemaining"
-        );
-        if (timeRemaining != undefined) {
-          timeRemainingSet.add(assignmentName);
-        }
+        // var timeRemaining = currentRow.getElementsByClassName(
+        //   "submissionTimeChart--timeRemaining"
+        // );
+        // if (timeRemaining.length != 0) {
+        //   // console.log("time remaining tag: ", timeRemaining[0]);
+        //   timeRemainingMap[assignmentName] = timeRemaining[0].innerText;
+        // }
         // add assignments and due date to the object
         if (assignmentName[0] != undefined && dueDate[0] != undefined) {
           assignmentDueDateObject[assignmentName] = dueDate;
@@ -84,10 +85,10 @@ window.onload = () => {
       courseTitle = document.querySelector(".courseHeader--title").innerText;
     }
     console.log(assignmentDueDateObject);
-    console.log(timeRemainingSet);
+    // console.log(timeRemainingMap);
     console.log(courseTitle);
     createFile();
-    console.log(isLaterThanToday("JAN 15 AT 6:00PM"));
+    // console.log(isLaterThanToday("JAN 15 AT 6:00PM"));
   }
 
   var icsFile = null;
@@ -189,10 +190,6 @@ var monthMap = {
 const ON_TIME_DUE_DATE_ARRAY_LENGTH = 4;
 
 function convertDateAndTime(date) {
-  // get today's year and month
-  let today = new Date();
-  let todayYear = today.getFullYear();
-
   let dateArray = date.split(" ");
   let year, month, day, time, reformattedDate;
   // normal due date
@@ -220,6 +217,15 @@ function convertDateAndTime(date) {
   }
 
   // TODO: need to reconsider which year to use
+  // get today's year
+  let today = new Date();
+  let todayYear = today.getFullYear();
+  let todayMonth = today.getMonth();
+  let todayDay = today.getDay();
+
+  if (todayMonth >= Number(month) && todayDay > Number(day)) {
+    todayYear++;
+  }
 
   reformattedDate = todayYear + month + day + "T" + hour + minute + "00";
   console.log(reformattedDate);
@@ -240,7 +246,7 @@ function isLaterThanToday(date) {
     ":" +
     assignmentDate.slice(13, 15);
   assignmentDate = new Date(assignmentDate);
-  console.log("today's date", today);
-  console.log("assignment date", assignmentDate);
+  // console.log("today's date", today);
+  // console.log("assignment date", assignmentDate);
   return assignmentDate > today;
 }
