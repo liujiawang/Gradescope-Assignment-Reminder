@@ -31,7 +31,7 @@ window.onload = () => {
 
   // declare an object to store the key, value pair: {assignment name: [on time due date, late due date]}
   var assignmentDueDateObject = {};
-  
+
   var courseTitle;
 
   // TODO: need to work on this in the convertDateAndTime() function
@@ -42,45 +42,52 @@ window.onload = () => {
   function getStatus() {
     // only "no submission" assignments have "submissionStatus--text" class
     var textStatus = document.getElementsByClassName("submissionStatus--text");
-    // var searchValue = "No Submission";   // no need to check "No Submission" --> can consider deleting
+    var searchValue = "No Submission";
 
     for (var i = 0; i < textStatus.length; i++) {
-      var currentRow = textStatus[i].parentNode.parentElement;
-      // extract assignment name
-      var assignmentName =
-        currentRow.querySelectorAll('[role="rowheader"]')[0].innerText;
-      // extract submission time nodes (could contain late submission due date)
-      var submissionTime = currentRow.querySelectorAll(
-        ".submissionTimeChart--dueDate"
-      );
-      var dueDate = []; // [on time due date, late due date]
-      if (submissionTime[0] != undefined) {
-        dueDate.push(submissionTime[0].innerText);
-      }
-      // The assignment has late due dates
-      if (submissionTime.length > 1) {
-        dueDate.push(submissionTime[1].innerText);
-      }
-      // if the assignment has time remaining, add to the set
-      var timeRemaining = currentRow.querySelectorAll(
-        ".submissionTimeChart--timeRemaining"
-      );
-      if (timeRemaining != undefined) {
-        timeRemainingSet.add(assignmentName);
-      }
-      // add assignments and due date to the object
-      if (assignmentName[0] != undefined && dueDate[0] != undefined) {
-        assignmentDueDateObject[assignmentName] = dueDate;
+      // we only want to extract the assignments that are not submitted
+      if (
+        textStatus[i] != undefined &&
+        textStatus[i].innerText == searchValue
+      ) {
+        // console.log(textStatus[i]);
+        var currentRow = textStatus[i].parentNode.parentElement;
+        // extract assignment name
+        var assignmentName =
+          currentRow.querySelectorAll('[role="rowheader"]')[0].innerText;
+        // extract submission time nodes (could contain late submission due date)
+        var submissionTime = currentRow.querySelectorAll(
+          ".submissionTimeChart--dueDate"
+        );
+        var dueDate = []; // [on time due date, late due date]
+        if (submissionTime[0] != undefined) {
+          dueDate.push(submissionTime[0].innerText);
+        }
+        // The assignment has late due dates
+        if (submissionTime.length > 1) {
+          dueDate.push(submissionTime[1].innerText);
+        }
+        // if the assignment has time remaining, add to the set
+        var timeRemaining = currentRow.querySelectorAll(
+          ".submissionTimeChart--timeRemaining"
+        );
+        if (timeRemaining != undefined) {
+          timeRemainingSet.add(assignmentName);
+        }
+        // add assignments and due date to the object
+        if (assignmentName[0] != undefined && dueDate[0] != undefined) {
+          assignmentDueDateObject[assignmentName] = dueDate;
+        }
       }
 
       // add course title
       courseTitle = document.querySelector(".courseHeader--title").innerText;
-
     }
     console.log(assignmentDueDateObject);
     console.log(timeRemainingSet);
     console.log(courseTitle);
     createFile();
+    console.log(isLaterThanToday("JAN 15 AT 6:00PM"));
   }
 
   var icsFile = null;
@@ -97,23 +104,31 @@ window.onload = () => {
 
     // add each assignment to calendar
     Object.entries(assignmentDueDateObject).forEach(([key, value]) => {
-      // add the normal due date
-      iCalendar += singleEventHelper(
-        { start: convertDateAndTime(value[0]) },
-        "[" + courseTitle + "] " + key,
-        "Your assignment " + key + " in "+ courseTitle +" is due on this time."
-        )
-
-      if (value[1] != undefined ){
+      if (isLaterThanToday(value[0])) {
+        // add the normal due date
+        iCalendar += singleEventHelper(
+          { start: convertDateAndTime(value[0]) },
+          "[" + courseTitle + "] " + key,
+          "Your assignment " +
+            key +
+            " in " +
+            courseTitle +
+            " is due on this time."
+        );
+      }
+      if (value[1] != undefined && isLaterThanToday(value[1])) {
         iCalendar += singleEventHelper(
           { start: convertDateAndTime(value[1]) },
           "[" + courseTitle + "] " + key,
-          "Your assignment " + key + " in "+ courseTitle +" is late due on this time."
-          )
+          "Your assignment " +
+            key +
+            " in " +
+            courseTitle +
+            " is late due on this time."
+        );
       }
-
     });
-    
+
     // add ending to iCalendar
     iCalendar += "END:VCALENDAR";
     addToCalendarAnchor.href = makeIcsFile();
@@ -126,7 +141,8 @@ window.onload = () => {
     var icsEvent =
       "BEGIN:VEVENT\n" +
       "UID:" +
-      date + description +
+      date.start +
+      description +
       "\n" +
       "DTSTART;VALUE=DATE:" +
       date.start +
@@ -208,4 +224,23 @@ function convertDateAndTime(date) {
   reformattedDate = todayYear + month + day + "T" + hour + minute + "00";
   console.log(reformattedDate);
   return reformattedDate;
+}
+
+function isLaterThanToday(date) {
+  let today = new Date();
+  let assignmentDate = convertDateAndTime(date);
+  assignmentDate =
+    assignmentDate.slice(0, 4) +
+    "-" +
+    assignmentDate.slice(4, 6) +
+    "-" +
+    assignmentDate.slice(6, 11) +
+    ":" +
+    assignmentDate.slice(11, 13) +
+    ":" +
+    assignmentDate.slice(13, 15);
+  assignmentDate = new Date(assignmentDate);
+  console.log("today's date", today);
+  console.log("assignment date", assignmentDate);
+  return assignmentDate > today;
 }
