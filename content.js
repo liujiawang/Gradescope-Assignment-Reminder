@@ -84,9 +84,9 @@ window.onload = () => {
       // add course title
       courseTitle = document.querySelector(".courseHeader--title").innerText;
     }
-    console.log(assignmentDueDateObject);
+    // console.log(assignmentDueDateObject);
     // console.log(timeRemainingMap);
-    console.log(courseTitle);
+    // console.log(courseTitle);
     createFile();
     // console.log(isLaterThanToday("JAN 15 AT 6:00PM"));
   }
@@ -105,7 +105,19 @@ window.onload = () => {
 
     // add each assignment to calendar
     Object.entries(assignmentDueDateObject).forEach(([key, value]) => {
+      let today = new Date();
+      let todayYear = today.getFullYear();
+      let todayMonth = today.getMonth();
+      let todayDay = today.getDate();
+
       if (isLaterThanToday(value[0])) {
+        if (
+          todayMonth >= Number(convertDateAndTime(value[0])[1]) &&
+          todayDay > Number(convertDateAndTime(value[0])[2])
+        ) {
+          let newYear = convertDateAndTime(value[0])[0]++;
+        }
+
         // add the normal due date
         iCalendar += singleEventHelper(
           { start: convertDateAndTime(value[0]) },
@@ -220,21 +232,27 @@ function convertDateAndTime(date) {
   // get today's year
   let today = new Date();
   let todayYear = today.getFullYear();
-  let todayMonth = today.getMonth();
-  let todayDay = today.getDay();
 
-  if (todayMonth >= Number(month) && todayDay > Number(day)) {
-    todayYear++;
-  }
+  console.log("today month: ", todayMonth);
+  console.log("today day: ", todayDay);
+  console.log("assignment month; ", month);
+  console.log("assignment day; ", day);
 
-  reformattedDate = todayYear + month + day + "T" + hour + minute + "00";
-  console.log(reformattedDate);
-  return reformattedDate;
+  return [todayYear, month, day, hour, minute];
 }
 
 function isLaterThanToday(date) {
   let today = new Date();
   let assignmentDate = convertDateAndTime(date);
+  console.log("converted assignment date: ", assignmentDate);
+  let assignmentDate =
+    assignmentDate[0] +
+    assignmentDate[1] +
+    assignmentDate[2] +
+    "T" +
+    assignmentDate[4] +
+    assignmentDate[5] +
+    "00";
   assignmentDate =
     assignmentDate.slice(0, 4) +
     "-" +
