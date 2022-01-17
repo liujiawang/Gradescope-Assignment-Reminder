@@ -1,5 +1,7 @@
-# MCIT 2022 Winter Hackathon   
-## Project Name: Gradescope Assignment Reminder
+# Project Name: Gradescope Assignment Reminder
+
+## MCIT 2022 Winter Hackathon   
+
 ![](Images/G_128.png)
 
 **Team Members**    
