@@ -15,7 +15,7 @@ This is a chrome extension that allows users to add their assignment due dates f
 
 ### Demo
 
-Video Instruction & Demo URL: [Video](https://youtube.com)
+Video Instruction & Demo URL: [Video](https://youtu.be/1rSFJ429gH0)
 
 Presentation URL: [Slides](https://docs.google.com/presentation/d/1KlZxNRnTZnn7JLoF7JwZHm_G5spL6CXoyamE_7rDni0/edit#slide=id.g10e770a5ae8_1_23)
 
@@ -28,9 +28,11 @@ Note: Once this extension is pulished to Google Chrome Store, you can directly d
 
 #### Install the extension
 1. Download the .zip file and unzip it in your local folder.
-2. Use Google Chrome browser. Go to chrome://extensions/ and check the box for Developer mode.
+2. Use Google Chrome browser. Go to "chrome://extensions/" and check the box for Developer mode.
 3. Click on "Load Unpacked Extension" and upload the folder.
 4. Now you'll see "Gradescope Assignment Reminder" extension icon appeared in your extension list. 
+
+*You can also check out this [website](https://bashvlas.com/blog/install-chrome-extension-in-developer-mode) for more tutorials.*
 
 #### Use the extension
 1. Go to Gradescope.com and select your course.
