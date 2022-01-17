@@ -28,7 +28,7 @@ Note: Once this extension is pulished to Google Chrome Store, you can directly d
 
 #### Install the extension
 1. Download the .zip file and unzip it in your local folder.
-2. Use Google Chrome browser. Go to chrome://extensions/ and check the box for Developer mode.
+2. Use Google Chrome browser. Go to [chrome://extensions/](chrome://extensions/) and check the box for Developer mode.
 3. Click on "Load Unpacked Extension" and upload the folder.
 4. Now you'll see "Gradescope Assignment Reminder" extension icon appeared in your extension list. 
 
