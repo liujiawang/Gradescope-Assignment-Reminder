@@ -18,7 +18,7 @@ This is a chrome extension that allows users to add their assignment due dates f
 
 Video Instruction & Demo URL: [Video](https://youtu.be/1rSFJ429gH0)
 
-Presentation URL: [Slides](https://docs.google.com/presentation/d/1KlZxNRnTZnn7JLoF7JwZHm_G5spL6CXoyamE_7rDni0/edit#slide=id.g10e770a5ae8_1_23)
+Presentation URL: [Slides](https://docs.google.com/presentation/d/1KlZxNRnTZnn7JLoF7JwZHm_G5spL6CXoyamE_7rDni0/edit?usp=sharing)
 
 
 ### How to Use
